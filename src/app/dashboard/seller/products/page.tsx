@@ -112,10 +112,10 @@ export default function SellerProductsPage() {
               <AnimatePresence>
                 {activeMenuId === product.id && (
                   <motion.div 
-                    initial={{ opacity: 0, scale: 0.9, originTopRight: true }}
+                    initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.9 }}
-                    className="absolute top-14 right-4 bg-card/90 backdrop-blur-xl border border-border/50 shadow-2xl rounded-2xl overflow-hidden z-20 min-w-[140px]"
+                    className="absolute top-14 right-4 bg-card/90 backdrop-blur-xl border border-border/50 shadow-2xl rounded-2xl overflow-hidden z-20 min-w-[140px] origin-top-right"
                   >
                     <button className="w-full flex items-center gap-2 px-4 py-3 hover:bg-muted text-sm font-bold transition-colors">
                       <Edit3 className="w-4 h-4 text-blue-500" /> Edit
