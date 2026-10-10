@@ -785,6 +785,9 @@ export default function LoginPage() {
                 <form onSubmit={handleOtpSubmit} className="flex flex-col gap-4 mt-2">
                   <input 
                     type="text"
+                    inputMode="numeric"
+                    pattern="[0-9]*"
+                    autoComplete="one-time-code"
                     maxLength={6}
                     value={otp}
                     onChange={(e) => {
@@ -792,7 +795,7 @@ export default function LoginPage() {
                       setOtpError(false);
                     }}
                     placeholder="• • • • • •"
-                    className="w-full px-4 py-4 rounded-xl border border-[#FFD700]/30 bg-muted/30 focus:bg-background focus:outline-none focus:border-[#FFD700] transition-colors text-3xl tracking-[1rem] text-center font-mono"
+                    className="w-full px-2 py-4 rounded-xl border border-[#FFD700]/30 bg-muted/30 focus:bg-background focus:outline-none focus:border-[#FFD700] transition-colors text-[clamp(1.5rem,5vw,1.875rem)] tracking-[clamp(0.5rem,3vw,1rem)] text-center font-mono"
                     required
                   />
                   {otpError && (

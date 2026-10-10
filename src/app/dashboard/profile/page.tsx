@@ -5,7 +5,7 @@ import { useLanguageStore } from "@/store/useLanguageStore";
 import { dictionaries } from "@/i18n/dictionaries";
 import { 
   Package, MapPin, Settings, Store, LogOut, User, 
-  ChevronRight, CreditCard, Heart, Bell, HelpCircle 
+  ChevronRight, CreditCard, Heart, Bell, HelpCircle, Users, GraduationCap, PlayCircle
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 
@@ -40,6 +40,26 @@ export default function BuyerProfilePage() {
         </div>
       </div>
 
+      {/* Academy Training Banner - Upsell Funnel */}
+      <div 
+        onClick={() => router.push("/dashboard/academy")}
+        className="w-full bg-gradient-to-r from-blue-600 to-indigo-700 rounded-2xl p-6 text-white mb-8 shadow-md relative overflow-hidden group cursor-pointer hover:shadow-lg transition-all"
+      >
+        <div className="absolute -right-4 -top-4 opacity-10 group-hover:scale-110 transition-transform duration-500">
+          <GraduationCap className="w-32 h-32" />
+        </div>
+        <div className="relative z-10 flex items-center justify-between">
+          <div>
+            <h3 className="text-xl font-bold font-heading mb-1 flex items-center gap-2">
+              <PlayCircle className="w-6 h-6 text-[#FFD700]" />
+              {t.academy}
+            </h3>
+            <p className="text-blue-100 text-sm max-w-[200px] md:max-w-xs">{t.academyDesc}</p>
+          </div>
+          <ChevronRight className="w-6 h-6 text-white shrink-0" />
+        </div>
+      </div>
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         
         {/* Account Settings Section */}
@@ -47,7 +67,10 @@ export default function BuyerProfilePage() {
           <h3 className="text-lg font-bold mb-4 px-2 text-foreground/80">{t.accountSettings}</h3>
           <div className="bg-background rounded-2xl shadow-sm border border-border/50 overflow-hidden">
             
-            <button className="w-full flex items-center justify-between p-4 hover:bg-muted/50 transition-colors border-b border-border/50 text-left">
+            <button 
+              onClick={() => router.push("/dashboard/profile/info")}
+              className="w-full flex items-center justify-between p-4 hover:bg-muted/50 transition-colors border-b border-border/50 text-left"
+            >
               <div className="flex items-center gap-4">
                 <div className="p-2 bg-muted rounded-full">
                   <User className="w-5 h-5 text-muted-foreground" />
@@ -60,7 +83,10 @@ export default function BuyerProfilePage() {
               <ChevronRight className="w-5 h-5 text-muted-foreground shrink-0" />
             </button>
 
-            <button className="w-full flex items-center justify-between p-4 hover:bg-muted/50 transition-colors border-b border-border/50 text-left">
+            <button 
+              onClick={() => router.push("/dashboard/profile/orders")}
+              className="w-full flex items-center justify-between p-4 hover:bg-muted/50 transition-colors border-b border-border/50 text-left"
+            >
               <div className="flex items-center gap-4">
                 <div className="p-2 bg-muted rounded-full">
                   <Package className="w-5 h-5 text-muted-foreground" />
@@ -73,7 +99,10 @@ export default function BuyerProfilePage() {
               <ChevronRight className="w-5 h-5 text-muted-foreground shrink-0" />
             </button>
             
-            <button className="w-full flex items-center justify-between p-4 hover:bg-muted/50 transition-colors border-b border-border/50 text-left">
+            <button 
+              onClick={() => router.push("/dashboard/profile/addresses")}
+              className="w-full flex items-center justify-between p-4 hover:bg-muted/50 transition-colors border-b border-border/50 text-left"
+            >
               <div className="flex items-center gap-4">
                 <div className="p-2 bg-muted rounded-full">
                   <MapPin className="w-5 h-5 text-muted-foreground" />
@@ -86,7 +115,10 @@ export default function BuyerProfilePage() {
               <ChevronRight className="w-5 h-5 text-muted-foreground shrink-0" />
             </button>
 
-            <button className="w-full flex items-center justify-between p-4 hover:bg-muted/50 transition-colors text-left">
+            <button 
+              onClick={() => router.push("/dashboard/profile/payments")}
+              className="w-full flex items-center justify-between p-4 hover:bg-muted/50 transition-colors text-left"
+            >
               <div className="flex items-center gap-4">
                 <div className="p-2 bg-muted rounded-full">
                   <CreditCard className="w-5 h-5 text-muted-foreground" />
@@ -107,7 +139,26 @@ export default function BuyerProfilePage() {
           <h3 className="text-lg font-bold mb-4 px-2 text-foreground/80">{t.preferences}</h3>
           <div className="bg-background rounded-2xl shadow-sm border border-border/50 overflow-hidden">
             
-            <button className="w-full flex items-center justify-between p-4 hover:bg-muted/50 transition-colors border-b border-border/50 text-left">
+            <button 
+              onClick={() => router.push("/dashboard/profile/following")}
+              className="w-full flex items-center justify-between p-4 hover:bg-muted/50 transition-colors border-b border-border/50 text-left"
+            >
+              <div className="flex items-center gap-4">
+                <div className="p-2 bg-muted rounded-full">
+                  <Users className="w-5 h-5 text-muted-foreground" />
+                </div>
+                <div>
+                  <div className="font-medium">{t.followedStores}</div>
+                  <div className="text-xs text-muted-foreground">{t.followedStoresDesc}</div>
+                </div>
+              </div>
+              <ChevronRight className="w-5 h-5 text-muted-foreground shrink-0" />
+            </button>
+
+            <button 
+              onClick={() => router.push("/dashboard/profile/wishlist")}
+              className="w-full flex items-center justify-between p-4 hover:bg-muted/50 transition-colors border-b border-border/50 text-left"
+            >
               <div className="flex items-center gap-4">
                 <div className="p-2 bg-muted rounded-full">
                   <Heart className="w-5 h-5 text-muted-foreground" />
@@ -120,7 +171,10 @@ export default function BuyerProfilePage() {
               <ChevronRight className="w-5 h-5 text-muted-foreground shrink-0" />
             </button>
 
-            <button className="w-full flex items-center justify-between p-4 hover:bg-muted/50 transition-colors border-b border-border/50 text-left">
+            <button 
+              onClick={() => router.push("/dashboard/profile/notifications")}
+              className="w-full flex items-center justify-between p-4 hover:bg-muted/50 transition-colors border-b border-border/50 text-left"
+            >
               <div className="flex items-center gap-4">
                 <div className="p-2 bg-muted rounded-full">
                   <Bell className="w-5 h-5 text-muted-foreground" />
@@ -133,7 +187,10 @@ export default function BuyerProfilePage() {
               <ChevronRight className="w-5 h-5 text-muted-foreground shrink-0" />
             </button>
             
-            <button className="w-full flex items-center justify-between p-4 hover:bg-muted/50 transition-colors border-b border-border/50 text-left">
+            <button 
+              onClick={() => router.push("/dashboard/profile/help")}
+              className="w-full flex items-center justify-between p-4 hover:bg-muted/50 transition-colors border-b border-border/50 text-left"
+            >
               <div className="flex items-center gap-4">
                 <div className="p-2 bg-muted rounded-full">
                   <HelpCircle className="w-5 h-5 text-muted-foreground" />
