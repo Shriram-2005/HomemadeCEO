@@ -41,7 +41,10 @@ export default function SellerProfilePage() {
       </div>
 
       {/* Seller Academy Training Banner */}
-      <div className="w-full bg-gradient-to-r from-purple-600 to-pink-600 rounded-2xl p-6 text-white mb-8 shadow-md relative overflow-hidden group cursor-pointer hover:shadow-lg transition-all">
+      <div 
+        onClick={() => router.push('/dashboard/seller/academy')}
+        className="w-full bg-gradient-to-r from-purple-600 to-pink-600 rounded-2xl p-6 text-white mb-8 shadow-md relative overflow-hidden group cursor-pointer hover:shadow-lg transition-all"
+      >
         <div className="absolute -right-4 -top-4 opacity-10 group-hover:scale-110 transition-transform duration-500">
           <GraduationCap className="w-32 h-32" />
         </div>
@@ -64,7 +67,10 @@ export default function SellerProfilePage() {
           <h3 className="text-lg font-bold mb-4 px-2 text-foreground/80">{t.storeManagement}</h3>
           <div className="bg-background rounded-2xl shadow-sm border border-border/50 overflow-hidden">
             
-            <button className="w-full flex items-center justify-between p-4 hover:bg-muted/50 transition-colors border-b border-border/50 text-left">
+            <button 
+              onClick={() => router.push('/dashboard/seller/settings')}
+              className="w-full flex items-center justify-between p-4 hover:bg-muted/50 transition-colors border-b border-border/50 text-left"
+            >
               <div className="flex items-center gap-4">
                 <div className="p-2 bg-muted rounded-full">
                   <Settings className="w-5 h-5 text-muted-foreground" />
@@ -77,7 +83,10 @@ export default function SellerProfilePage() {
               <ChevronRight className="w-5 h-5 text-muted-foreground shrink-0" />
             </button>
 
-            <button className="w-full flex items-center justify-between p-4 hover:bg-muted/50 transition-colors border-b border-border/50 text-left">
+            <button 
+              onClick={() => router.push('/dashboard/seller/business')}
+              className="w-full flex items-center justify-between p-4 hover:bg-muted/50 transition-colors border-b border-border/50 text-left"
+            >
               <div className="flex items-center gap-4">
                 <div className="p-2 bg-muted rounded-full">
                   <Briefcase className="w-5 h-5 text-muted-foreground" />
@@ -90,7 +99,10 @@ export default function SellerProfilePage() {
               <ChevronRight className="w-5 h-5 text-muted-foreground shrink-0" />
             </button>
             
-            <button className="w-full flex items-center justify-between p-4 hover:bg-muted/50 transition-colors border-b border-border/50 text-left">
+            <button 
+              onClick={() => router.push('/dashboard/seller/shipping')}
+              className="w-full flex items-center justify-between p-4 hover:bg-muted/50 transition-colors border-b border-border/50 text-left"
+            >
               <div className="flex items-center gap-4">
                 <div className="p-2 bg-muted rounded-full">
                   <Truck className="w-5 h-5 text-muted-foreground" />
@@ -103,7 +115,10 @@ export default function SellerProfilePage() {
               <ChevronRight className="w-5 h-5 text-muted-foreground shrink-0" />
             </button>
 
-            <button className="w-full flex items-center justify-between p-4 hover:bg-muted/50 transition-colors text-left bg-gradient-to-r from-blue-500/5 to-purple-500/5">
+            <button 
+              onClick={() => router.push('/dashboard/seller/ai')}
+              className="w-full flex items-center justify-between p-4 hover:bg-muted/50 transition-colors text-left bg-gradient-to-r from-blue-500/5 to-purple-500/5"
+            >
               <div className="flex items-center gap-4">
                 <div className="p-2 bg-blue-500/10 rounded-full">
                   <Sparkles className="w-5 h-5 text-blue-600 dark:text-blue-400" />
@@ -124,7 +139,10 @@ export default function SellerProfilePage() {
           <h3 className="text-lg font-bold mb-4 px-2 text-foreground/80">{t.performanceSupport}</h3>
           <div className="bg-background rounded-2xl shadow-sm border border-border/50 overflow-hidden">
             
-            <button className="w-full flex items-center justify-between p-4 hover:bg-muted/50 transition-colors border-b border-border/50 text-left">
+            <button 
+              onClick={() => router.push('/dashboard/seller/analytics')}
+              className="w-full flex items-center justify-between p-4 hover:bg-muted/50 transition-colors border-b border-border/50 text-left"
+            >
               <div className="flex items-center gap-4">
                 <div className="p-2 bg-muted rounded-full">
                   <BarChart3 className="w-5 h-5 text-muted-foreground" />
@@ -137,7 +155,10 @@ export default function SellerProfilePage() {
               <ChevronRight className="w-5 h-5 text-muted-foreground shrink-0" />
             </button>
 
-            <button className="w-full flex items-center justify-between p-4 hover:bg-muted/50 transition-colors border-b border-border/50 text-left">
+            <button 
+              onClick={() => router.push('/dashboard/seller/earnings')}
+              className="w-full flex items-center justify-between p-4 hover:bg-muted/50 transition-colors border-b border-border/50 text-left"
+            >
               <div className="flex items-center gap-4">
                 <div className="p-2 bg-muted rounded-full">
                   <DollarSign className="w-5 h-5 text-muted-foreground" />

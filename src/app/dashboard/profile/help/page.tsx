@@ -1,61 +1,63 @@
 "use client";
 
 import React from "react";
-import { ArrowLeft, MessageCircle, HelpCircle, Mail, Phone } from "lucide-react";
+import { motion } from "framer-motion";
+import { ArrowLeft, MessageCircle, FileText, PhoneCall, ShieldAlert } from "lucide-react";
 import { useRouter } from "next/navigation";
 
-export default function HelpSupportPage() {
+export default function BuyerHelpPage() {
   const router = useRouter();
 
   return (
-    <div className="w-full max-w-3xl mx-auto pb-12">
+    <div className="w-full max-w-3xl mx-auto px-4 md:px-6 pb-32 md:pb-12 pt-6 min-h-screen">
       <div className="flex items-center gap-4 mb-8">
-        <button 
-          onClick={() => router.back()}
-          className="p-2 -ml-2 hover:bg-muted rounded-full transition-colors"
-        >
-          <ArrowLeft className="w-6 h-6" />
+        <button onClick={() => router.back()} className="w-10 h-10 bg-card border border-border/50 rounded-full flex items-center justify-center hover:bg-muted transition-colors shadow-sm">
+          <ArrowLeft className="w-5 h-5" />
         </button>
-        <h1 className="text-2xl md:text-3xl font-bold font-heading">Help & Support</h1>
-      </div>
-      
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-        <div className="bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-6 border border-blue-100 dark:border-blue-900/50 flex flex-col items-center text-center">
-          <div className="w-12 h-12 bg-blue-100 dark:bg-blue-800 rounded-full flex items-center justify-center mb-4">
-            <MessageCircle className="w-6 h-6 text-blue-600 dark:text-blue-400" />
-          </div>
-          <h3 className="font-bold mb-2">Chat with Jami AI</h3>
-          <p className="text-sm text-muted-foreground mb-4">Get instant answers 24/7 from your personal assistant.</p>
-          <button className="mt-auto bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-full transition-colors w-full">
-            Start Chat
-          </button>
-        </div>
-        
-        <div className="bg-background rounded-2xl p-6 border border-border/50 flex flex-col items-center text-center shadow-sm">
-          <div className="w-12 h-12 bg-muted rounded-full flex items-center justify-center mb-4">
-            <Mail className="w-6 h-6 text-muted-foreground" />
-          </div>
-          <h3 className="font-bold mb-2">Email Support</h3>
-          <p className="text-sm text-muted-foreground mb-4">Expect a reply within 24 hours.</p>
-          <button className="mt-auto bg-muted hover:bg-muted/80 font-medium py-2 px-6 rounded-full transition-colors w-full">
-            support@homemadeceo.com
-          </button>
+        <div>
+          <h1 className="text-2xl md:text-3xl font-bold font-heading">Help & Support</h1>
+          <p className="text-sm text-muted-foreground font-medium">How can we assist you?</p>
         </div>
       </div>
 
-      <h3 className="font-bold text-xl mb-4 font-heading">Frequently Asked Questions</h3>
-      <div className="space-y-4">
-        {[
-          "How do I track my order?",
-          "Can I return a homemade product?",
-          "How do I become a seller?"
-        ].map((q, i) => (
-          <div key={i} className="bg-background border border-border/50 rounded-xl p-4 flex items-center justify-between cursor-pointer hover:bg-muted/50 transition-colors">
-            <span className="font-medium">{q}</span>
-            <HelpCircle className="w-5 h-5 text-muted-foreground" />
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+        
+        <div className="bg-card border border-border/50 p-6 rounded-3xl hover:shadow-md transition-shadow cursor-pointer">
+          <div className="w-14 h-14 bg-blue-500/10 text-blue-600 rounded-full flex items-center justify-center mb-4">
+            <MessageCircle className="w-7 h-7" />
           </div>
-        ))}
+          <h3 className="font-bold text-lg mb-1">Chat with Support</h3>
+          <p className="text-sm text-muted-foreground">Get instant help from our 24/7 team regarding your orders.</p>
+        </div>
+
+        <div className="bg-card border border-border/50 p-6 rounded-3xl hover:shadow-md transition-shadow cursor-pointer">
+          <div className="w-14 h-14 bg-orange-500/10 text-orange-600 rounded-full flex items-center justify-center mb-4">
+            <FileText className="w-7 h-7" />
+          </div>
+          <h3 className="font-bold text-lg mb-1">Read FAQs</h3>
+          <p className="text-sm text-muted-foreground">Find answers to common questions about shipping and refunds.</p>
+        </div>
+
       </div>
+
+      <div className="bg-muted/30 rounded-3xl p-6 border border-border/50 space-y-4">
+        <h3 className="font-bold text-lg">Other Contact Methods</h3>
+        
+        <button className="w-full flex items-center justify-between p-4 bg-background border border-border/50 rounded-2xl hover:bg-muted transition-colors">
+          <div className="flex items-center gap-3">
+            <PhoneCall className="w-5 h-5 text-primary" />
+            <span className="font-bold">Call Us (1800-123-4567)</span>
+          </div>
+        </button>
+
+        <button className="w-full flex items-center justify-between p-4 bg-background border border-border/50 rounded-2xl hover:bg-muted transition-colors">
+          <div className="flex items-center gap-3">
+            <ShieldAlert className="w-5 h-5 text-red-500" />
+            <span className="font-bold">Report a Safety Issue</span>
+          </div>
+        </button>
+      </div>
+
     </div>
   );
 }

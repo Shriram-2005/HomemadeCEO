@@ -365,6 +365,22 @@ export const dictionaries = {
       formHouse: "House No., Building Name",
       formArea: "Road name, Area, Colony",
       formContinuePayment: "Continue to Payment",
+      
+      // Seller Dashboard
+      sellerDashboard: "Seller Dashboard",
+      sellerTotalEarnings: "Total Earnings",
+      sellerActiveOrders: "Active Orders",
+      sellerStoreViews: "Store Views",
+      sellerAddProduct: "Add New Product",
+      sellerUploadShort: "Upload a Short",
+      sellerPendingActions: "Pending Actions",
+      sellerPackOrder: "Pack Order",
+      sellerProducts: "Products",
+      sellerOrders: "Orders",
+      sellerShorts: "Shorts",
+      sellerProfile: "Store Settings",
+      sellerSwitchToBuyer: "Switch to Buyer",
+      sellerNoOrders: "No active orders right now.",
     }
   },
   ml: {
@@ -733,6 +749,22 @@ export const dictionaries = {
       formHouse: "വീട്ടു നമ്പർ, കെട്ടിടത്തിന്റെ പേര്",
       formArea: "റോഡിന്റെ പേര്, പ്രദേശം, കോളനി",
       formContinuePayment: "പേയ്‌മെന്റിലേക്ക് തുടരുക",
+
+      // Seller Dashboard
+      sellerDashboard: "വിൽപ്പനക്കാരന്റെ ഡാഷ്‌ബോർഡ്",
+      sellerTotalEarnings: "ആകെ വരുമാനം",
+      sellerActiveOrders: "സജീവമായ ഓർഡറുകൾ",
+      sellerStoreViews: "സ്റ്റോർ കാഴ്ചകൾ",
+      sellerAddProduct: "പുതിയ ഉൽപ്പന്നം ചേർക്കുക",
+      sellerUploadShort: "ഒരു ഷോർട്ട് അപ്‌ലോഡ് ചെയ്യുക",
+      sellerPendingActions: "തീർപ്പുകൽപ്പിക്കാത്തവ",
+      sellerPackOrder: "ഓർഡർ പായ്ക്ക് ചെയ്യുക",
+      sellerProducts: "ഉൽപ്പന്നങ്ങൾ",
+      sellerOrders: "ഓർഡറുകൾ",
+      sellerShorts: "ഷോർട്ട്സ്",
+      sellerProfile: "സ്റ്റോർ ക്രമീകരണങ്ങൾ",
+      sellerSwitchToBuyer: "വാങ്ങുന്നയാളിലേക്ക് മാറുക",
+      sellerNoOrders: "ഇപ്പോൾ സജീവമായ ഓർഡറുകളൊന്നുമില്ല.",
     }
   }
 };

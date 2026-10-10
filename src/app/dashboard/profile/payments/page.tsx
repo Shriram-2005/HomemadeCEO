@@ -1,69 +1,62 @@
 "use client";
 
 import React from "react";
-import { ArrowLeft, CreditCard, Plus, Trash2 } from "lucide-react";
+import { motion } from "framer-motion";
+import { ArrowLeft, CreditCard, ShieldCheck, Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
 
-export default function PaymentsPage() {
+export default function BuyerPaymentsPage() {
   const router = useRouter();
 
-  const dummyCards = [
-    {
-      id: 1,
-      type: "Visa",
-      last4: "4242",
-      expiry: "12/28",
-      name: "AMINA M",
-      isDefault: true
-    }
-  ];
-
   return (
-    <div className="w-full max-w-3xl mx-auto pb-12">
-      <div className="flex items-center justify-between mb-8">
-        <div className="flex items-center gap-4">
-          <button 
-            onClick={() => router.back()}
-            className="p-2 -ml-2 hover:bg-muted rounded-full transition-colors"
-          >
-            <ArrowLeft className="w-6 h-6" />
-          </button>
-          <h1 className="text-2xl md:text-3xl font-bold font-heading">Payment Methods</h1>
-        </div>
-        <button className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-full font-medium transition-colors text-sm">
-          <Plus className="w-4 h-4" />
-          Add Card
+    <div className="w-full max-w-4xl mx-auto px-4 md:px-6 pb-32 md:pb-12 pt-6 min-h-screen">
+      <div className="flex items-center gap-4 mb-8">
+        <button onClick={() => router.back()} className="w-10 h-10 bg-card border border-border/50 rounded-full flex items-center justify-center hover:bg-muted transition-colors shadow-sm">
+          <ArrowLeft className="w-5 h-5" />
         </button>
+        <div>
+          <h1 className="text-2xl md:text-3xl font-bold font-heading">Payment Methods</h1>
+          <p className="text-sm text-muted-foreground font-medium">Manage your cards and UPI</p>
+        </div>
       </div>
-      
-      <div className="space-y-4">
-        {dummyCards.map((card) => (
-          <div key={card.id} className="bg-gradient-to-br from-slate-800 to-slate-900 text-white rounded-2xl p-6 shadow-xl relative overflow-hidden max-w-md">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -translate-y-16 translate-x-8 blur-2xl"></div>
-            
-            <div className="flex justify-between items-center mb-8 relative z-10">
-              <CreditCard className="w-8 h-8 opacity-80" />
-              {card.isDefault && (
-                <span className="bg-white/20 text-xs font-bold px-2 py-1 rounded backdrop-blur-sm">Default</span>
-              )}
+
+      <div className="bg-green-500/10 text-green-700 dark:text-green-400 p-4 rounded-2xl flex items-start gap-3 mb-8 border border-green-500/20">
+        <ShieldCheck className="w-5 h-5 shrink-0 mt-0.5" />
+        <p className="text-sm font-medium leading-relaxed">Your payment information is securely encrypted and stored. We do not share your full card details with sellers.</p>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        
+        {/* Saved UPI */}
+        <motion.div 
+          initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
+          className="bg-card border border-border/50 rounded-3xl p-6 shadow-sm flex items-center justify-between"
+        >
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 bg-blue-500/10 text-blue-600 rounded-full flex items-center justify-center">
+              <span className="font-black text-xl">U</span>
             </div>
-            
-            <div className="text-xl tracking-widest font-mono mb-4 relative z-10 opacity-90">
-              **** **** **** {card.last4}
-            </div>
-            
-            <div className="flex justify-between items-end relative z-10">
-              <div>
-                <p className="text-[10px] uppercase tracking-widest opacity-60 mb-1">Card Holder</p>
-                <p className="font-medium text-sm tracking-wide">{card.name}</p>
-              </div>
-              <div>
-                <p className="text-[10px] uppercase tracking-widest opacity-60 mb-1">Expires</p>
-                <p className="font-medium text-sm tracking-wide">{card.expiry}</p>
-              </div>
+            <div>
+              <p className="font-bold">Google Pay (UPI)</p>
+              <p className="text-sm text-muted-foreground mt-0.5">aiswarya@okicici</p>
             </div>
           </div>
-        ))}
+        </motion.div>
+
+        {/* Add New Method */}
+        <motion.div 
+          initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
+          className="bg-card border-2 border-dashed border-border/60 hover:border-primary/50 hover:bg-primary/5 transition-all rounded-3xl p-6 flex items-center gap-4 cursor-pointer group"
+        >
+          <div className="w-12 h-12 bg-muted rounded-full flex items-center justify-center group-hover:bg-primary group-hover:text-primary-foreground group-hover:scale-110 transition-all">
+            <Plus className="w-6 h-6" />
+          </div>
+          <div>
+            <p className="font-bold">Add Payment Method</p>
+            <p className="text-sm text-muted-foreground mt-0.5">Card, UPI, Netbanking</p>
+          </div>
+        </motion.div>
+
       </div>
     </div>
   );

@@ -1,78 +1,61 @@
 "use client";
 
 import React from "react";
-import { ArrowLeft, MapPin, Plus, Trash2, Edit2 } from "lucide-react";
+import { motion } from "framer-motion";
+import { ArrowLeft, MapPin, Plus, CheckCircle2, MoreVertical } from "lucide-react";
 import { useRouter } from "next/navigation";
 
-export default function SavedAddressesPage() {
+export default function BuyerAddressesPage() {
   const router = useRouter();
 
-  const dummyAddresses = [
-    {
-      id: 1,
-      type: "Home",
-      name: "Amina Spices",
-      address: "123, Gandhi Road, Kochi",
-      city: "Kerala",
-      pincode: "682001",
-      phone: "+91 98765 43210",
-      isDefault: true
-    },
-    {
-      id: 2,
-      type: "Office",
-      name: "Amina Storefront",
-      address: "45/A, Market Street, Ernakulam",
-      city: "Kerala",
-      pincode: "682031",
-      phone: "+91 91234 56789",
-      isDefault: false
-    }
-  ];
-
   return (
-    <div className="w-full max-w-3xl mx-auto pb-12">
-      <div className="flex items-center justify-between mb-8">
-        <div className="flex items-center gap-4">
-          <button 
-            onClick={() => router.back()}
-            className="p-2 -ml-2 hover:bg-muted rounded-full transition-colors"
-          >
-            <ArrowLeft className="w-6 h-6" />
-          </button>
-          <h1 className="text-2xl md:text-3xl font-bold font-heading">Saved Addresses</h1>
-        </div>
-        <button className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-full font-medium transition-colors text-sm">
-          <Plus className="w-4 h-4" />
-          Add New
+    <div className="w-full max-w-4xl mx-auto px-4 md:px-6 pb-32 md:pb-12 pt-6 min-h-screen">
+      <div className="flex items-center gap-4 mb-8">
+        <button onClick={() => router.back()} className="w-10 h-10 bg-card border border-border/50 rounded-full flex items-center justify-center hover:bg-muted transition-colors shadow-sm">
+          <ArrowLeft className="w-5 h-5" />
         </button>
+        <div>
+          <h1 className="text-2xl md:text-3xl font-bold font-heading">Saved Addresses</h1>
+          <p className="text-sm text-muted-foreground font-medium">Manage where you receive orders</p>
+        </div>
       </div>
-      
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {dummyAddresses.map((addr) => (
-          <div key={addr.id} className="bg-background rounded-2xl p-6 shadow-sm border border-border/50 relative">
-            {addr.isDefault && (
-              <span className="absolute top-4 right-4 bg-blue-100 text-blue-700 text-[10px] uppercase tracking-wider font-bold px-2 py-1 rounded">Default</span>
-            )}
-            <div className="flex items-center gap-2 mb-3">
-              <MapPin className="w-5 h-5 text-muted-foreground" />
-              <h3 className="font-bold">{addr.type}</h3>
-            </div>
-            <p className="font-medium text-sm mb-1">{addr.name}</p>
-            <p className="text-sm text-muted-foreground mb-1">{addr.address}</p>
-            <p className="text-sm text-muted-foreground mb-3">{addr.city} - {addr.pincode}</p>
-            <p className="text-sm font-medium mb-4">{addr.phone}</p>
-            
-            <div className="flex gap-2 pt-4 border-t border-border/50">
-              <button className="flex-1 flex items-center justify-center gap-2 text-sm font-medium py-2 rounded-lg hover:bg-muted transition-colors">
-                <Edit2 className="w-4 h-4" /> Edit
-              </button>
-              <button className="flex-1 flex items-center justify-center gap-2 text-sm font-medium text-red-500 py-2 rounded-lg hover:bg-red-500/10 transition-colors">
-                <Trash2 className="w-4 h-4" /> Delete
-              </button>
-            </div>
+        
+        {/* Default Address */}
+        <motion.div 
+          initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
+          className="bg-primary/5 border-2 border-primary/30 rounded-3xl p-6 relative overflow-hidden"
+        >
+          <div className="absolute top-0 right-0 bg-primary text-primary-foreground text-[10px] font-bold px-3 py-1 rounded-bl-xl">
+            DEFAULT
           </div>
-        ))}
+          <div className="flex justify-between items-start mb-4 mt-2">
+            <div className="flex items-center gap-2 font-bold text-lg">
+              <MapPin className="w-5 h-5 text-primary" /> Home
+            </div>
+            <button className="text-muted-foreground hover:text-foreground">
+              <MoreVertical className="w-5 h-5" />
+            </button>
+          </div>
+          <p className="text-foreground font-medium mb-1">Aiswarya R.</p>
+          <p className="text-muted-foreground text-sm leading-relaxed mb-4">
+            Flat 4B, Skyline Apartments<br/>Kakkanad, Ernakulam<br/>Kerala - 682030
+          </p>
+          <p className="text-sm font-bold">Ph: +91 9876543210</p>
+        </motion.div>
+
+        {/* Add New */}
+        <motion.div 
+          initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
+          className="bg-card border-2 border-dashed border-border/60 hover:border-primary/50 hover:bg-primary/5 transition-all rounded-3xl p-6 flex flex-col items-center justify-center min-h-[200px] cursor-pointer group"
+        >
+          <div className="w-12 h-12 bg-muted rounded-full flex items-center justify-center mb-3 group-hover:bg-primary group-hover:text-primary-foreground group-hover:scale-110 transition-all">
+            <Plus className="w-6 h-6" />
+          </div>
+          <p className="font-bold">Add New Address</p>
+        </motion.div>
+
       </div>
     </div>
   );

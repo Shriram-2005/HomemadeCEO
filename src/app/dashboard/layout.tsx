@@ -162,13 +162,23 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                   </div>
 
                   {isSellerPage ? (
-                    <DropdownMenuItem onClick={() => router.push('/dashboard')} className="cursor-pointer gap-2 py-2 font-medium">
-                      <User className="w-4 h-4" /> {t.switchToBuyer}
-                    </DropdownMenuItem>
+                    <>
+                      <DropdownMenuItem onClick={() => router.push('/dashboard/seller/profile')} className="cursor-pointer gap-2 py-2 font-medium text-foreground font-bold bg-muted/50 rounded-md mb-1">
+                        <Settings className="w-4 h-4" /> Seller Profile Hub
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => router.push('/dashboard')} className="cursor-pointer gap-2 py-2 font-medium">
+                        <User className="w-4 h-4" /> {t.switchToBuyer}
+                      </DropdownMenuItem>
+                    </>
                   ) : (
-                    <DropdownMenuItem onClick={() => router.push('/dashboard/seller')} className="cursor-pointer gap-2 py-2 font-medium">
-                      <User className="w-4 h-4" /> {t.switchToSeller}
-                    </DropdownMenuItem>
+                    <>
+                      <DropdownMenuItem onClick={() => router.push('/dashboard/profile')} className="cursor-pointer gap-2 py-2 font-medium text-foreground font-bold bg-muted/50 rounded-md mb-1">
+                        <User className="w-4 h-4" /> Buyer Profile Hub
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => router.push('/dashboard/seller')} className="cursor-pointer gap-2 py-2 font-medium">
+                        <Store className="w-4 h-4" /> {t.switchToSeller}
+                      </DropdownMenuItem>
+                    </>
                   )}
 
                   <DropdownMenuSeparator />
@@ -208,31 +218,31 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                     </>
                   ) : (
                     <>
-                      <DropdownMenuItem className="cursor-pointer gap-2 py-2">
+                      <DropdownMenuItem onClick={() => router.push('/dashboard/seller/settings')} className="cursor-pointer gap-2 py-2">
                         <Settings className="w-4 h-4" /> {t.storeSettings}
                       </DropdownMenuItem>
-                      <DropdownMenuItem className="cursor-pointer gap-2 py-2">
+                      <DropdownMenuItem onClick={() => router.push('/dashboard/seller/business')} className="cursor-pointer gap-2 py-2">
                         <Briefcase className="w-4 h-4" /> {t.businessProfile}
                       </DropdownMenuItem>
-                      <DropdownMenuItem className="cursor-pointer gap-2 py-2">
+                      <DropdownMenuItem onClick={() => router.push('/dashboard/seller/shipping')} className="cursor-pointer gap-2 py-2">
                         <Truck className="w-4 h-4" /> {t.shippingDelivery}
                       </DropdownMenuItem>
 
                       <DropdownMenuSeparator />
 
-                      <DropdownMenuItem className="cursor-pointer gap-2 py-2">
+                      <DropdownMenuItem onClick={() => router.push('/dashboard/seller/analytics')} className="cursor-pointer gap-2 py-2">
                         <BarChart3 className="w-4 h-4" /> {t.storeAnalytics}
                       </DropdownMenuItem>
-                      <DropdownMenuItem className="cursor-pointer gap-2 py-2">
+                      <DropdownMenuItem onClick={() => router.push('/dashboard/seller/earnings')} className="cursor-pointer gap-2 py-2">
                         <DollarSign className="w-4 h-4" /> {t.earnings}
                       </DropdownMenuItem>
-                      <DropdownMenuItem className="cursor-pointer gap-2 py-2 font-bold text-purple-600 dark:text-purple-400">
+                      <DropdownMenuItem onClick={() => router.push('/dashboard/seller/ai')} className="cursor-pointer gap-2 py-2 font-bold text-purple-600 dark:text-purple-400">
                         <Sparkles className="w-4 h-4" /> {t.jamiAI}
                       </DropdownMenuItem>
-                      <DropdownMenuItem className="cursor-pointer gap-2 py-2">
+                      <DropdownMenuItem onClick={() => router.push('/dashboard/profile/help')} className="cursor-pointer gap-2 py-2">
                         <HelpCircle className="w-4 h-4" /> {t.helpSupport}
                       </DropdownMenuItem>
-                      <DropdownMenuItem className="cursor-pointer gap-2 py-2 font-bold text-pink-600 dark:text-pink-400">
+                      <DropdownMenuItem onClick={() => router.push('/dashboard/seller/academy')} className="cursor-pointer gap-2 py-2 font-bold text-pink-600 dark:text-pink-400">
                         <GraduationCap className="w-4 h-4" /> {t.sellerAcademy}
                       </DropdownMenuItem>
                       <DropdownMenuSeparator />
