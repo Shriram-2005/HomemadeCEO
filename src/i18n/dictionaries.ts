@@ -381,6 +381,28 @@ export const dictionaries = {
       sellerProfile: "Store Settings",
       sellerSwitchToBuyer: "Switch to Buyer",
       sellerNoOrders: "No active orders right now.",
+
+      // Telegram & AI Bot
+      jamiTelegramTitle: "Jami AI Telegram Bot",
+      jamiTelegramSubtitle: "Run your storefront via Telegram messages and quick commands",
+      jamiTelegramConnected: "Connected & Active",
+      jamiTelegramBotUsername: "@Homemade_CEO_JAMI_bot",
+      jamiTelegramOpenChat: "Open in Telegram",
+      jamiTelegramSendTest: "Send Test Alert",
+      jamiTelegramSending: "Sending Alert...",
+      jamiTelegramSentSuccess: "Test alert dispatched to Telegram!",
+      jamiTelegramChatIdLabel: "Telegram Chat ID (Optional)",
+      jamiTelegramChatIdPlaceholder: "Enter your Telegram Chat ID",
+      jamiTelegramCommandsTitle: "Available Bot Commands",
+      jamiCmdStart: "Start Jami co-pilot and view business menu",
+      jamiCmdOrders: "View recent customer orders and fulfillment",
+      jamiCmdSales: "Check weekly revenue and UPI payout status",
+      jamiCmdDescribe: "Generate high-converting product descriptions",
+      jamiCmdHelp: "Get instant guide and business tips",
+      whatsappComingSoonTitle: "WhatsApp Cloud API",
+      whatsappComingSoonBadge: "Coming Soon",
+      whatsappComingSoonDesc: "Direct WhatsApp business integration with automatic invoice receipts and buyer notifications is arriving in the next platform release.",
+      whatsappNotifyMe: "Notify Me When Ready",
     }
   },
   ml: {
@@ -765,6 +787,28 @@ export const dictionaries = {
       sellerProfile: "സ്റ്റോർ ക്രമീകരണങ്ങൾ",
       sellerSwitchToBuyer: "വാങ്ങുന്നയാളിലേക്ക് മാറുക",
       sellerNoOrders: "ഇപ്പോൾ സജീവമായ ഓർഡറുകളൊന്നുമില്ല.",
+
+      // Telegram & AI Bot
+      jamiTelegramTitle: "Jami AI ടെലിഗ്രാം ബോട്ട്",
+      jamiTelegramSubtitle: "ടെലിഗ്രാം സന്ദേശങ്ങളിലൂടെ നിങ്ങളുടെ സ്റ്റോർ നിയന്ത്രിക്കുക",
+      jamiTelegramConnected: "കണക്റ്റുചെയ്‌തു & സജീവം",
+      jamiTelegramBotUsername: "@Homemade_CEO_JAMI_bot",
+      jamiTelegramOpenChat: "ടെലിഗ്രാമിൽ തുറക്കുക",
+      jamiTelegramSendTest: "ടെസ്റ്റ് സന്ദേശം അയക്കുക",
+      jamiTelegramSending: "സന്ദേശം അയക്കുന്നു...",
+      jamiTelegramSentSuccess: "ടെസ്റ്റ് സന്ദേശം ടെലിഗ്രാമിലേക്ക് അയച്ചു!",
+      jamiTelegramChatIdLabel: "ടെലിഗ്രാം ചാറ്റ് ഐഡി (ഓപ്ഷണൽ)",
+      jamiTelegramChatIdPlaceholder: "നിങ്ങളുടെ ചാറ്റ് ഐഡി നൽകുക",
+      jamiTelegramCommandsTitle: "ലഭ്യമായ ബോട്ട് കമാൻഡുകൾ",
+      jamiCmdStart: "Jami കോ-പൈലറ്റ് ആരംഭിക്കുക, ബിസിനസ്സ് മെനു കാണുക",
+      jamiCmdOrders: "ഉപഭോക്തൃ ഓർഡറുകൾ കാണുക",
+      jamiCmdSales: "വരുമാനവും UPI പേഔട്ട് നിലയും പരിശോധിക്കുക",
+      jamiCmdDescribe: "ഉൽപ്പന്ന വിവരണം സ്വയം തയ്യാറാക്കുക",
+      jamiCmdHelp: "സഹായവും ബിസിനസ്സ് നുറുങ്ങുകളും നേടുക",
+      whatsappComingSoonTitle: "വാട്ട്‌സ്ആപ്പ് ക്ലൗഡ് API",
+      whatsappComingSoonBadge: "ഉടൻ വരുന്നു",
+      whatsappComingSoonDesc: "ഇൻവോയ്സ് രസീതുകളും അറിയിപ്പുകളും നൽകുന്ന വാട്ട്‌സ്ആപ്പ് ബിസിനസ്സ് ഇൻ്റഗ്രേഷൻ അടുത്ത അപ്‌ഡേറ്റിൽ എത്തുന്നതാണ്.",
+      whatsappNotifyMe: "ലഭ്യമാകുമ്പോൾ എന്നെ അറിയിക്കുക",
     }
   }
 };

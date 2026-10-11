@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { 
   TrendingUp, Package, Eye, PlusCircle, Video, 
-  ArrowRight, User, Bell, ChevronRight, Activity, Sparkles 
+  ArrowRight, User, Bell, ChevronRight, Activity, Sparkles, Send 
 } from "lucide-react";
 import { useLanguageStore } from "@/store/useLanguageStore";
 import { dictionaries } from "@/i18n/dictionaries";
@@ -102,13 +102,25 @@ export default function SellerDashboardPage() {
             </p>
           </div>
           
-          <button 
-            onClick={() => router.push('/dashboard/seller/shorts')}
-            className="w-full md:w-auto bg-white text-indigo-950 px-6 py-3.5 rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-indigo-50 hover:scale-105 active:scale-95 transition-all shadow-lg"
-          >
-            <Video className="w-5 h-5" />
-            Create a Short Now
-          </button>
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 w-full md:w-auto">
+            <button 
+              onClick={() => router.push('/dashboard/seller/shorts')}
+              className="w-full sm:w-auto bg-white text-indigo-950 px-5 py-3 rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-indigo-50 hover:scale-105 active:scale-95 transition-all shadow-lg text-sm"
+            >
+              <Video className="w-4 h-4" />
+              Create a Short Now
+            </button>
+
+            <a 
+              href="https://t.me/Homemade_CEO_JAMI_bot"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full sm:w-auto bg-white/20 hover:bg-white/30 text-white border border-white/30 px-5 py-3 rounded-2xl font-bold flex items-center justify-center gap-2 transition-all shadow-md text-sm text-center"
+            >
+              <Send className="w-4 h-4" />
+              Telegram Bot
+            </a>
+          </div>
         </div>
       </motion.div>
 
