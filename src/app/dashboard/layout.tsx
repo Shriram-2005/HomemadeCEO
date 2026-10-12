@@ -8,6 +8,7 @@ import { Moon, Sun, Globe, User, LogOut, Settings, Search, ShoppingCart, Package
 import { useTheme } from "next-themes";
 import { motion, AnimatePresence } from "framer-motion";
 import { useCartStore } from "@/store/useCartStore";
+import { JamiChatWidget } from "@/components/JamiChatWidget";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -34,8 +35,6 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const cartItemCount = isMounted ? getTotalItems() : 0;
 
   const isSellerPage = pathname.startsWith("/dashboard/seller");
-  const [isJamiOpen, setIsJamiOpen] = useState(false);
-  const [isJamiSidebarOpen, setIsJamiSidebarOpen] = useState(false);
 
   const handleLogout = () => {
     // In a real app, clear auth tokens here
@@ -314,204 +313,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       )}
 
       {/* Global Jami AI Chat System */}
-      {isSellerPage && (
-        <AnimatePresence>
-          {!isJamiOpen ? (
-            <motion.button
-              key="jami-fab"
-              initial={{ scale: 0, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0, opacity: 0 }}
-              transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
-              onClick={() => setIsJamiOpen(true)}
-              className="fixed bottom-[80px] md:bottom-8 right-4 md:right-8 z-[110] bg-gradient-to-br from-blue-600 to-purple-600 text-white w-14 h-14 rounded-full shadow-[0_0_20px_rgba(147,51,234,0.4)] hover:shadow-[0_0_30px_rgba(147,51,234,0.7)] hover:scale-105 transition-all duration-300 flex items-center justify-center overflow-hidden shrink-0"
-            >
-              <Sparkles className="w-6 h-6 shrink-0" />
-            </motion.button>
-          ) : (
-            <motion.div
-              key="jami-chat"
-              initial={{ clipPath: "circle(28px at calc(100% - 40px) calc(100% - 40px))", opacity: 0 }}
-              animate={{ clipPath: "circle(150% at calc(100% - 40px) calc(100% - 40px))", opacity: 1 }}
-              exit={{ clipPath: "circle(28px at calc(100% - 40px) calc(100% - 40px))", opacity: 0 }}
-              transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
-              className="origin-bottom-right fixed top-16 bottom-[72px] md:bottom-0 left-0 right-0 md:top-auto md:left-auto md:right-8 md:bottom-8 md:w-[400px] md:h-[650px] z-[110] bg-background md:border md:border-border/50 md:rounded-3xl shadow-2xl flex flex-col overflow-hidden"
-            >
-              {/* Chat Header */}
-              <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-4 flex items-center justify-between text-white shadow-md z-10 shrink-0">
-                <div className="flex items-center gap-3">
-                  <button 
-                    onClick={() => setIsJamiSidebarOpen(true)}
-                    className="p-1.5 hover:bg-white/20 rounded-md transition-colors shrink-0 -ml-1.5"
-                  >
-                    <Menu className="w-6 h-6 text-white" />
-                  </button>
-                  <div className="min-w-0">
-                    <h3 className="font-bold text-lg leading-tight truncate">{t.jamiAI}</h3>
-                    <p className="text-xs font-medium text-blue-100 truncate">Always online</p>
-                  </div>
-                </div>
-                <button 
-                  onClick={() => setIsJamiOpen(false)}
-                  className="p-2 hover:bg-white/20 rounded-full transition-colors shrink-0"
-                >
-                  <X className="w-6 h-6 text-white" />
-                </button>
-              </div>
-
-              {/* Sidebar Drawer */}
-              <AnimatePresence>
-                {isJamiSidebarOpen && (
-                  <>
-                    <motion.div 
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                      onClick={() => setIsJamiSidebarOpen(false)}
-                      className="absolute inset-0 bg-black/40 z-20 backdrop-blur-sm"
-                    />
-                    <motion.div 
-                      initial={{ x: "-100%" }}
-                      animate={{ x: 0 }}
-                      exit={{ x: "-100%" }}
-                      transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                      className="absolute top-0 left-0 bottom-0 w-[280px] bg-background z-30 shadow-2xl flex flex-col border-r border-border/50"
-                    >
-                      <div className="p-4 border-b border-border/50 flex items-center justify-between">
-                        <span className="font-bold font-heading text-lg">Jami AI</span>
-                        <button onClick={() => setIsJamiSidebarOpen(false)} className="p-2 hover:bg-muted rounded-full">
-                          <X className="w-5 h-5 text-muted-foreground" />
-                        </button>
-                      </div>
-                      
-                      <div className="p-4 flex-1 overflow-y-auto">
-                        <button className="w-full flex items-center gap-3 bg-purple-600 text-white p-3 rounded-xl font-medium hover:bg-purple-700 transition-colors mb-6 shadow-sm">
-                          <Plus className="w-5 h-5" />
-                          New Chat
-                        </button>
-                        
-                        <div className="text-xs font-bold text-muted-foreground mb-3 uppercase tracking-wider">Recent</div>
-                        <div className="space-y-1">
-                          <button className="w-full text-left p-3 rounded-lg hover:bg-muted transition-colors flex items-center gap-3 text-sm">
-                            <MessageSquare className="w-4 h-4 text-muted-foreground shrink-0" />
-                            <span className="truncate">Product description for spices</span>
-                          </button>
-                          <button className="w-full text-left p-3 rounded-lg hover:bg-muted transition-colors flex items-center gap-3 text-sm">
-                            <MessageSquare className="w-4 h-4 text-muted-foreground shrink-0" />
-                            <span className="truncate">Sales analysis Q3</span>
-                          </button>
-                        </div>
-
-                        <div className="text-xs font-bold text-muted-foreground mb-3 mt-6 uppercase tracking-wider">Messaging APIs</div>
-                        <div className="space-y-1.5">
-                          <a 
-                            href="https://t.me/Homemade_CEO_JAMI_bot"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="w-full text-left p-2.5 rounded-xl bg-blue-500/10 hover:bg-blue-500/20 text-blue-600 dark:text-blue-400 transition-colors flex items-center justify-between text-xs font-medium"
-                          >
-                            <span className="flex items-center gap-2">
-                              <Send className="w-3.5 h-3.5 shrink-0" />
-                              <span className="truncate">Telegram (@Homemade_CEO_JAMI_bot)</span>
-                            </span>
-                            <ExternalLink className="w-3 h-3 opacity-70 shrink-0" />
-                          </a>
-
-                          <div className="w-full text-left p-2.5 rounded-xl bg-muted/60 text-muted-foreground flex items-center justify-between text-xs">
-                            <span className="flex items-center gap-2">
-                              <MessageSquare className="w-3.5 h-3.5 shrink-0" />
-                              <span className="truncate">WhatsApp Cloud API</span>
-                            </span>
-                            <span className="text-[10px] bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20 px-2 py-0.5 rounded-full font-bold">Soon</span>
-                          </div>
-                        </div>
-                      </div>
-                      
-                      <div className="p-4 border-t border-border/50">
-                        <button className="w-full text-left p-3 rounded-lg hover:bg-muted transition-colors flex items-center gap-3 text-sm">
-                          <Settings className="w-4 h-4 text-muted-foreground" />
-                          <span>AI Settings</span>
-                        </button>
-                      </div>
-                    </motion.div>
-                  </>
-                )}
-              </AnimatePresence>
-
-              {/* Chat Body (Gemini style) */}
-              <div className="flex-1 p-6 overflow-y-auto bg-muted/30 flex flex-col relative">
-                {/* Greeting */}
-                <div className="mt-4 md:mt-8 mb-6 md:mb-8">
-                  <h2 className="text-3xl md:text-4xl font-bold font-heading bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2">
-                    Hello, Amina
-                  </h2>
-                  <p className="text-xl md:text-2xl font-medium text-muted-foreground">
-                    How can I help you grow today?
-                  </p>
-                  <div className="flex flex-wrap items-center gap-2 mt-4">
-                    <a
-                      href="https://t.me/Homemade_CEO_JAMI_bot"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-sm transition-all"
-                    >
-                      <Send className="w-3 h-3" />
-                      Chat on Telegram (@Homemade_CEO_JAMI_bot)
-                      <ExternalLink className="w-3 h-3 opacity-80" />
-                    </a>
-                    <span className="inline-flex items-center gap-1 bg-muted border border-border/50 text-muted-foreground text-[11px] font-medium px-2.5 py-1 rounded-full">
-                      <Clock className="w-3 h-3 text-amber-500" />
-                      WhatsApp API (Coming Soon)
-                    </span>
-                  </div>
-                </div>
-
-                {/* Suggestions Grid */}
-                <div className="grid grid-cols-1 gap-3 mt-auto mb-4">
-                  <button className="text-left p-4 bg-background border border-border/50 hover:border-purple-500/50 hover:bg-purple-500/5 rounded-2xl transition-all shadow-sm flex items-center gap-3 group">
-                    <div className="p-2 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-full group-hover:scale-110 transition-transform">
-                      <Sparkles className="w-4 h-4" />
-                    </div>
-                    <div>
-                      <p className="font-medium text-sm">Write a product description</p>
-                      <p className="text-xs text-muted-foreground">For my new Kerala banana chips</p>
-                    </div>
-                  </button>
-                  
-                  <button className="text-left p-4 bg-background border border-border/50 hover:border-purple-500/50 hover:bg-purple-500/5 rounded-2xl transition-all shadow-sm flex items-center gap-3 group">
-                    <div className="p-2 bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 rounded-full group-hover:scale-110 transition-transform">
-                      <BarChart3 className="w-4 h-4" />
-                    </div>
-                    <div>
-                      <p className="font-medium text-sm">Analyze my weekly sales</p>
-                      <p className="text-xs text-muted-foreground">Compare this week to last week</p>
-                    </div>
-                  </button>
-                </div>
-              </div>
-
-              {/* Chat Input with Camera & Mic */}
-              <div className="p-4 border-t border-border/50 bg-background z-10">
-                <div className="flex items-center gap-2">
-                  <button className="w-11 h-11 rounded-full bg-muted flex items-center justify-center hover:bg-muted/80 text-muted-foreground transition-colors shrink-0">
-                    <Camera className="w-5 h-5" />
-                  </button>
-                  
-                  <input 
-                    type="text" 
-                    placeholder="Ask Jami anything..." 
-                    className="flex-1 bg-muted/50 border border-border/50 rounded-full py-3 px-4 text-sm focus:outline-none focus:border-purple-500 transition-colors min-w-0"
-                  />
-                  
-                  <button className="w-11 h-11 rounded-full bg-purple-600 flex items-center justify-center hover:bg-purple-700 text-white shadow-md transition-colors shrink-0">
-                    <Mic className="w-5 h-5" />
-                  </button>
-                </div>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      )}
+      {isSellerPage && <JamiChatWidget />}
 
     </div>
   );

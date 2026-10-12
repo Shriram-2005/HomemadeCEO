@@ -1,4 +1,6 @@
-export const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN || "8880859942:AAF74gO9p31OasM6V2L6VTSMAX7d90WtvC0";
+import { queryGroqLLM, ChatMessage } from "@/lib/groq";
+
+export const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN || "";
 export const TELEGRAM_BOT_USERNAME = process.env.NEXT_PUBLIC_TELEGRAM_BOT_USERNAME || "Homemade_CEO_JAMI_bot";
 export const TELEGRAM_BOT_URL = process.env.NEXT_PUBLIC_TELEGRAM_BOT_URL || "https://t.me/Homemade_CEO_JAMI_bot";
 
@@ -117,18 +119,44 @@ export async function setTelegramBotCommands() {
 }
 
 /**
- * Process inbound message from Telegram and generate Jami AI reply
+ * Helper to convert standard Markdown to Telegram & HTML friendly tags
  */
-export function generateJamiReply(incomingText: string, senderName: string = "Creator"): {
+export function markdownToTelegramHtml(markdown: string): string {
+  let html = markdown
+    // Convert headings ### Heading to <b>Heading</b>
+    .replace(/^###?\s+(.+)$/gm, "<b>$1</b>\n")
+    .replace(/^##?\s+(.+)$/gm, "<b>$1</b>\n")
+    // Convert bold **text** to <b>text</b>
+    .replace(/\*\*(.*?)\*\*/g, "<b>$1</b>")
+    // Convert italic *text* or _text_ to <i>text</i>
+    .replace(/(^|[^\*])\*([^\*]+)\*([^\*]|$)/g, "$1<i>$2</i>$3")
+    .replace(/(^|[^_])_([^_]+)_([^_]|$)/g, "$1<i>$2</i>$3")
+    // Remove em dashes strictly per project guidelines
+    .replace(/—/g, "-")
+    // Convert inline code `text` to <code>text</code>
+    .replace(/`([^`]+)`/g, "<code>$1</code>");
+
+  return html;
+}
+
+/**
+ * Process inbound message from Telegram or Web Chat and generate Jami AI reply
+ * Powered by Groq LLM (llama-3.3-70b-versatile) fine-tuned for Homemade CEO Kerala creators.
+ */
+export async function generateJamiReply(
+  incomingText: string,
+  senderName: string = "Creator",
+  history: ChatMessage[] = []
+): Promise<{
   text: string;
   replyMarkup?: Record<string, unknown>;
-} {
+}> {
   const clean = incomingText.trim().toLowerCase();
 
   // /start command
-  if (clean.startsWith("/start")) {
+  if (clean === "/start") {
     return {
-      text: `<b>Namaskaram ${senderName}!</b>\n\nI am <b>Jami</b>, your personal AI co-pilot on <b>Homemade CEO</b>.\n\nI help homemakers and creators in Kerala run and scale their business straight from their phone.\n\n<b>What I can do for you:</b>\n- Track your daily customer orders\n- Check live sales & UPI payouts\n- Craft mouthwatering product descriptions\n- Instant support in Malayalam & English\n\nTap an option below or type your question:`,
+      text: `<b>Namaskaram ${senderName}!</b>\n\nI am <b>Jami</b> (ജമി), your personal AI co-pilot on <b>Homemade CEO</b>.\n\nI help homemakers and creators in Kerala run and scale their business straight from their phone.\n\n<b>What I can do for you:</b>\n- Track your daily customer orders\n- Check live sales & UPI payouts\n- Craft mouthwatering product descriptions\n- Instant support in Malayalam & English\n\nTap an option below or ask me any business question:`,
       replyMarkup: {
         inline_keyboard: [
           [
@@ -144,8 +172,8 @@ export function generateJamiReply(incomingText: string, senderName: string = "Cr
     };
   }
 
-  // /orders command
-  if (clean.startsWith("/orders") || clean.includes("order")) {
+  // Pure /orders command
+  if (clean === "/orders") {
     return {
       text: `<b>📦 Live Order Status:</b>\n\n- <b>Order #HM-8921</b>\n  Product: Traditional Cut Mango Pickle (500g)\n  Quantity: 2 units\n  Status: <b>Packing</b>\n  Customer: Priya Menon (Kochi)\n\n- <b>Order #HM-8919</b>\n  Product: Homemade Banana Chips\n  Quantity: 3 packs\n  Status: <b>Ready to Ship</b>\n  Customer: Rajesh Nair (Kozhikode)\n\n<i>To print packing labels or request courier pickup, visit your Seller Hub.</i>`,
       replyMarkup: {
@@ -158,8 +186,8 @@ export function generateJamiReply(incomingText: string, senderName: string = "Cr
     };
   }
 
-  // /sales command
-  if (clean.startsWith("/sales") || clean.includes("revenue") || clean.includes("earning")) {
+  // Pure /sales command
+  if (clean === "/sales") {
     return {
       text: `<b>💰 Financial Snapshot (This Week):</b>\n\n- Total Revenue: <b>₹4,850</b>\n- Completed Orders: <b>14</b>\n- Available Balance: <b>₹3,620</b>\n- Next Automatic Payout: <b>Friday, 5:00 PM via UPI</b>\n\n<i>Tip: Top performing item this week is Traditional Cut Mango Pickle.</i>`,
       replyMarkup: {
@@ -172,37 +200,58 @@ export function generateJamiReply(incomingText: string, senderName: string = "Cr
     };
   }
 
-  // /describe command
-  if (clean.startsWith("/describe") || clean.includes("description") || clean.includes("write")) {
+  // Pure /help command
+  if (clean === "/help") {
     return {
-      text: `<b>✨ Jami Description Generator:</b>\n\nHere is a ready-to-use description for your product:\n\n<b>Kerala Special Hot Mango Pickle (നാടൻ മാങ്ങാ അച്ചാർ)</b>\n<i>Handcrafted with love using freshly plucked farm mangoes, cold-pressed gingelly oil, and fragrant Malabar spices. Perfectly aged for authentic home flavor. No artificial preservatives.</i>\n\n<b>Price:</b> ₹180 (350g)\n<b>Shelf Life:</b> 6 Months\n\n<i>Copy and paste this into your product listing on Homemade CEO!</i>`,
+      text: `<b>Jami AI Assistant Help:</b>\n\nCommands you can send anytime:\n- /orders - Check live order status\n- /sales - Check weekly revenue & payouts\n- /describe - Generate enticing product descriptions\n- /help - Show this guide\n\nYou can also ask me anything in English or Malayalam (e.g. <i>"How to pack banana chips in monsoon?"</i> or <i>"അച്ചാർ ലാഭകരമായി വിൽക്കാൻ എന്തുചെയ്യണം?"</i>)!`,
+    };
+  }
+
+  // Natural Language & Custom Prompts -> Powered by Groq LLM Brain!
+  try {
+    let promptToSend = incomingText;
+    if (clean.startsWith("/describe")) {
+      const productQuery = incomingText.replace(/^\/describe/i, "").trim();
+      promptToSend = productQuery
+        ? `Write an authentic, high-converting product description for Homemade CEO for: ${productQuery}`
+        : `Generate an enticing, ready-to-use product description for a traditional Kerala homemade delicacy (like Cut Mango Pickle or Nendran Banana chips). Include ingredients, price, shelf life, and hygienic packing notes.`;
+    }
+
+    const llmRawResponse = await queryGroqLLM(promptToSend, history, senderName);
+    const formattedHtml = markdownToTelegramHtml(llmRawResponse);
+
+    return {
+      text: formattedHtml,
       replyMarkup: {
         inline_keyboard: [
           [
-            { text: "➕ Add New Product", url: "https://homemadeceo.com/dashboard/seller/products" },
+            { text: "📦 Check Orders", callback_data: "cmd_orders" },
+            { text: "💰 Check Sales", callback_data: "cmd_sales" },
+          ],
+          [
+            { text: "🌐 Open Seller Hub", url: "https://homemadeceo.com/dashboard/seller" },
+          ],
+        ],
+      },
+    };
+  } catch (groqError: unknown) {
+    console.error("[Groq Fallback Triggered]", groqError);
+
+    // Fallback if Groq has a network issue
+    return {
+      text: `<b>Namaskaram ${senderName}!</b>\n\nI received your query: <i>"${incomingText}"</i>.\n\nI am currently updating my neural connection with Homemade CEO. Here are quick shortcuts you can check right away:`,
+      replyMarkup: {
+        inline_keyboard: [
+          [
+            { text: "📦 Check Orders", callback_data: "cmd_orders" },
+            { text: "💰 Check Sales", callback_data: "cmd_sales" },
+          ],
+          [
+            { text: "✨ Magic Description", callback_data: "cmd_describe" },
           ],
         ],
       },
     };
   }
-
-  // /help command
-  if (clean.startsWith("/help") || clean.includes("help")) {
-    return {
-      text: `<b>Jami AI Assistant Help:</b>\n\nCommands you can send anytime:\n- /orders - Check live order status\n- /sales - Check weekly revenue & payouts\n- /describe - Generate enticing product descriptions\n- /help - Show this guide\n\nYou can also type any question in English or Malayalam!`,
-    };
-  }
-
-  // Default intelligent assistant response
-  return {
-    text: `<b>Jami AI:</b>\n\nThank you for reaching out, ${senderName}! I have recorded your note: <i>"${incomingText}"</i>.\n\nAs your business co-pilot, I am actively analyzing your store catalog and orders. Let me know if you would like me to generate descriptions, inspect pending orders, or review your earnings!`,
-    replyMarkup: {
-      inline_keyboard: [
-        [
-          { text: "📦 Check Orders", callback_data: "cmd_orders" },
-          { text: "💰 Check Sales", callback_data: "cmd_sales" },
-        ],
-      ],
-    },
-  };
 }
+

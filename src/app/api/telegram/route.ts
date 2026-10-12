@@ -38,7 +38,7 @@ export async function POST(req: Request) {
       const incomingText = update.message.text;
       const senderName = update.message.from?.first_name || "Creator";
 
-      const reply = generateJamiReply(incomingText, senderName);
+      const reply = await generateJamiReply(incomingText, senderName);
 
       await sendTelegramMessage(chatId, reply.text, {
         parse_mode: "HTML",
@@ -58,7 +58,7 @@ export async function POST(req: Request) {
       if (callbackData === "cmd_sales") prompt = "/sales";
       if (callbackData === "cmd_describe") prompt = "/describe";
 
-      const reply = generateJamiReply(prompt, senderName);
+      const reply = await generateJamiReply(prompt, senderName);
 
       await sendTelegramMessage(chatId, reply.text, {
         parse_mode: "HTML",
