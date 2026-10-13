@@ -26,11 +26,13 @@ import {
 import { useRouter } from "next/navigation";
 import { useLanguageStore } from "@/store/useLanguageStore";
 import { dictionaries } from "@/i18n/dictionaries";
+import { useJamiStore } from "@/store/useJamiStore";
 
 export default function SellerAIPage() {
   const router = useRouter();
   const { language } = useLanguageStore();
   const t = dictionaries[language].dashboard;
+  const { openWithCommand } = useJamiStore();
 
   const [chatId, setChatId] = useState("");
   const [isSending, setIsSending] = useState(false);
@@ -417,7 +419,10 @@ export default function SellerAIPage() {
           Built-in Seller AI Tools
         </h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div className="bg-card border border-border/50 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all group cursor-pointer">
+          <div
+            onClick={() => openWithCommand("/describe")}
+            className="bg-card border border-border/50 rounded-2xl p-5 shadow-sm hover:shadow-md hover:border-blue-500/40 transition-all group cursor-pointer"
+          >
             <div className="w-12 h-12 bg-blue-500/10 text-blue-600 rounded-2xl flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
               <MessageSquare className="w-6 h-6" />
             </div>
@@ -425,7 +430,10 @@ export default function SellerAIPage() {
             <p className="text-xs text-muted-foreground mt-1">SEO-optimized product stories in English and Malayalam.</p>
           </div>
 
-          <div className="bg-card border border-border/50 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all group cursor-pointer">
+          <div
+            onClick={() => openWithCommand("How do I take better product photos for my homemade items?")}
+            className="bg-card border border-border/50 rounded-2xl p-5 shadow-sm hover:shadow-md hover:border-pink-500/40 transition-all group cursor-pointer"
+          >
             <div className="w-12 h-12 bg-pink-500/10 text-pink-600 rounded-2xl flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
               <ImageIcon className="w-6 h-6" />
             </div>
@@ -433,7 +441,10 @@ export default function SellerAIPage() {
             <p className="text-xs text-muted-foreground mt-1">Clean product backdrops with one tap lighting fixes.</p>
           </div>
 
-          <div className="bg-card border border-border/50 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all group cursor-pointer">
+          <div
+            onClick={() => openWithCommand("What homemade Kerala products are in high demand right now?")}
+            className="bg-card border border-border/50 rounded-2xl p-5 shadow-sm hover:shadow-md hover:border-orange-500/40 transition-all group cursor-pointer"
+          >
             <div className="w-12 h-12 bg-orange-500/10 text-orange-600 rounded-2xl flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
               <TrendingUp className="w-6 h-6" />
             </div>
@@ -441,7 +452,10 @@ export default function SellerAIPage() {
             <p className="text-xs text-muted-foreground mt-1">Discover high-demand pickles, snacks, and seasonal items.</p>
           </div>
 
-          <div className="bg-card border border-border/50 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all group cursor-pointer">
+          <div
+            onClick={() => openWithCommand("Help me write a polite reply to a customer inquiry about my product.")}
+            className="bg-card border border-border/50 rounded-2xl p-5 shadow-sm hover:shadow-md hover:border-purple-500/40 transition-all group cursor-pointer"
+          >
             <div className="w-12 h-12 bg-purple-500/10 text-purple-600 rounded-2xl flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
               <Zap className="w-6 h-6" />
             </div>

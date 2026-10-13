@@ -30,6 +30,7 @@ import {
 } from "lucide-react";
 import { useLanguageStore } from "@/store/useLanguageStore";
 import { dictionaries } from "@/i18n/dictionaries";
+import { useJamiStore } from "@/store/useJamiStore";
 
 interface MessageItem {
   id: string;
@@ -50,9 +51,15 @@ export function JamiChatWidget() {
   const { language } = useLanguageStore();
   const t = dictionaries[language].dashboard;
 
-  const [isOpen, setIsOpen] = useState(false);
+  // Global store controls open/close + pending command from external pages
+  const { isOpen, pendingCommand, open, close, clearPendingCommand } = useJamiStore();
+
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [channel, setChannel] = useState<"select" | "telegram" | "whatsapp">("select");
+
+  // pendingCmdRef stores the pending command so the effect below can read it without stale closure
+  const pendingCmdRef = useRef<string | null>(null);
+  pendingCmdRef.current = pendingCommand;
 
   // Accordion state for sidebar chat history dropdowns
   const [isTelegramHistoryOpen, setIsTelegramHistoryOpen] = useState(true);
@@ -166,6 +173,10 @@ export function JamiChatWidget() {
     const text = (textToSend || inputText).trim();
     if (!text || isTyping) return;
 
+    // Always switch to Telegram chat view when a message is sent from any screen.
+    // This makes option buttons on the welcome/select screen fully functional.
+    setChannel("telegram");
+
     const userMsg: MessageItem = {
       id: `usr-${Date.now()}`,
       sender: "user",
@@ -176,6 +187,7 @@ export function JamiChatWidget() {
     setMessages((prev) => [...prev, userMsg]);
     if (!textToSend) setInputText("");
     setIsTyping(true);
+
 
     try {
       const history = messages.slice(-6).map((m) => ({
@@ -234,6 +246,18 @@ export function JamiChatWidget() {
     }
   };
 
+  // When opened externally with a pending command (e.g. from AI tool cards on /seller/ai),
+  // fire the command automatically after the chat view has rendered.
+  useEffect(() => {
+    if (isOpen && pendingCmdRef.current) {
+      const cmd = pendingCmdRef.current;
+      clearPendingCommand();
+      const timer = setTimeout(() => handleSendMessage(cmd), 150);
+      return () => clearTimeout(timer);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen]);
+
   const handleSelectHistoryItem = (item: ChatHistoryItem, targetChannel: "telegram" | "whatsapp") => {
     setChannel(targetChannel);
     setIsSidebarOpen(false);
@@ -267,7 +291,7 @@ export function JamiChatWidget() {
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0, opacity: 0 }}
             transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
-            onClick={() => setIsOpen(true)}
+            onClick={() => open()}
             className="fixed bottom-[80px] md:bottom-8 right-4 md:right-8 z-[110] bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 text-white w-14 h-14 rounded-full shadow-[0_0_20px_rgba(147,51,234,0.4)] hover:shadow-[0_0_30px_rgba(147,51,234,0.7)] hover:scale-105 transition-all duration-300 flex items-center justify-center overflow-hidden shrink-0 group"
             title="Chat with Jami AI"
           >
@@ -287,7 +311,7 @@ export function JamiChatWidget() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              onClick={() => setIsOpen(false)}
+              onClick={() => close()}
               className="fixed top-16 inset-x-0 bottom-0 bg-black/40 z-[95] md:hidden backdrop-blur-xs overscroll-none touch-none"
             />
 
@@ -345,7 +369,7 @@ export function JamiChatWidget() {
                   </button>
                 )}
                 <button
-                  onClick={() => setIsOpen(false)}
+                  onClick={() => close()}
                   className="p-1.5 hover:bg-white/20 rounded-full transition-colors shrink-0 ml-0.5"
                   title="Close"
                 >
@@ -734,28 +758,32 @@ export function JamiChatWidget() {
                   <div className="flex items-center gap-1.5 overflow-x-auto pb-1 shrink-0 scrollbar-none">
                     <button
                       onClick={() => handleSendMessage("/orders")}
-                      className="bg-card hover:bg-muted border border-border/60 text-[11px] font-medium px-2.5 py-1 rounded-lg shrink-0 flex items-center gap-1 transition-colors"
+                      disabled={isTyping}
+                      className="bg-card hover:bg-muted disabled:opacity-50 border border-border/60 text-[11px] font-medium px-2.5 py-1 rounded-lg shrink-0 flex items-center gap-1 transition-colors"
                     >
                       <Package className="w-3 h-3 text-emerald-500" />
                       /orders
                     </button>
                     <button
                       onClick={() => handleSendMessage("/sales")}
-                      className="bg-card hover:bg-muted border border-border/60 text-[11px] font-medium px-2.5 py-1 rounded-lg shrink-0 flex items-center gap-1 transition-colors"
+                      disabled={isTyping}
+                      className="bg-card hover:bg-muted disabled:opacity-50 border border-border/60 text-[11px] font-medium px-2.5 py-1 rounded-lg shrink-0 flex items-center gap-1 transition-colors"
                     >
                       <Wallet className="w-3 h-3 text-amber-500" />
                       /sales
                     </button>
                     <button
                       onClick={() => handleSendMessage("/describe")}
-                      className="bg-card hover:bg-muted border border-border/60 text-[11px] font-medium px-2.5 py-1 rounded-lg shrink-0 flex items-center gap-1 transition-colors"
+                      disabled={isTyping}
+                      className="bg-card hover:bg-muted disabled:opacity-50 border border-border/60 text-[11px] font-medium px-2.5 py-1 rounded-lg shrink-0 flex items-center gap-1 transition-colors"
                     >
                       <Zap className="w-3 h-3 text-purple-500" />
                       /describe
                     </button>
                     <button
                       onClick={() => handleSendMessage("/help")}
-                      className="bg-card hover:bg-muted border border-border/60 text-[11px] font-medium px-2.5 py-1 rounded-lg shrink-0 flex items-center gap-1 transition-colors"
+                      disabled={isTyping}
+                      className="bg-card hover:bg-muted disabled:opacity-50 border border-border/60 text-[11px] font-medium px-2.5 py-1 rounded-lg shrink-0 flex items-center gap-1 transition-colors"
                     >
                       <HelpCircle className="w-3 h-3 text-indigo-500" />
                       /help

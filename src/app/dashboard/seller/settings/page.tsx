@@ -57,6 +57,37 @@ export default function SellerSettingsPage() {
           </div>
         </section>
 
+        {/* Telegram Bot Account Linking Section */}
+        <section className="bg-card border border-blue-500/30 rounded-[2rem] p-6 shadow-sm relative overflow-hidden">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="flex items-start gap-4">
+              <div className="p-3.5 bg-blue-500/15 text-blue-600 dark:text-blue-400 rounded-2xl shrink-0">
+                <Smartphone className="w-6 h-6" />
+              </div>
+              <div>
+                <div className="flex items-center gap-2 mb-1">
+                  <h3 className="font-bold text-base text-foreground">Connect Telegram Bot (Jami Co-pilot)</h3>
+                  <span className="text-[10px] bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded-full font-bold">
+                    Live
+                  </span>
+                </div>
+                <p className="text-xs text-muted-foreground leading-relaxed">
+                  Link your <b>Amina Spices</b> store with <b>@Homemade_CEO_JAMI_bot</b> to receive live order pings, check weekly earnings, and dictate descriptions via voice notes.
+                </p>
+              </div>
+            </div>
+
+            <a
+              href="https://t.me/Homemade_CEO_JAMI_bot?start=LINK_seller_amina_01"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-bold px-5 py-3 rounded-xl text-xs sm:text-sm shadow-md transition-all shrink-0 hover:scale-[1.02] active:scale-[0.98]"
+            >
+              <span>Connect Telegram</span>
+            </a>
+          </div>
+        </section>
+
         <button className="w-full bg-red-500/10 text-red-500 font-bold py-4 rounded-2xl border border-red-500/20 hover:bg-red-500 hover:text-white transition-all">
           Deactivate Store
         </button>

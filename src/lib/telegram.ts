@@ -22,12 +22,22 @@ export interface TelegramChat {
   first_name?: string;
 }
 
+export interface TelegramAudioFile {
+  file_id: string;
+  file_unique_id: string;
+  duration: number;
+  mime_type?: string;
+  file_size?: number;
+}
+
 export interface TelegramMessage {
   message_id: number;
   from?: TelegramUser;
   chat: TelegramChat;
   date: number;
   text?: string;
+  voice?: TelegramAudioFile;
+  audio?: TelegramAudioFile;
 }
 
 export interface TelegramUpdate {
@@ -39,6 +49,33 @@ export interface TelegramUpdate {
     message?: TelegramMessage;
     data?: string;
   };
+}
+
+/**
+ * Retrieve downloadable file path from Telegram getFile API
+ */
+export async function getTelegramFile(fileId: string): Promise<{ ok: boolean; file_path?: string; error?: string }> {
+  try {
+    const res = await fetch(`${TELEGRAM_API_BASE}/getFile?file_id=${encodeURIComponent(fileId)}`, {
+      method: "GET",
+      cache: "no-store",
+    });
+    const data = await res.json();
+    if (data.ok && data.result?.file_path) {
+      return { ok: true, file_path: data.result.file_path };
+    }
+    return { ok: false, error: data.description || "Failed to retrieve file path" };
+  } catch (err: unknown) {
+    const errorMsg = err instanceof Error ? err.message : String(err);
+    return { ok: false, error: errorMsg };
+  }
+}
+
+/**
+ * Construct direct file download URL for a file_path
+ */
+export function getTelegramFileDownloadUrl(filePath: string): string {
+  return `https://api.telegram.org/file/bot${TELEGRAM_BOT_TOKEN}/${filePath}`;
 }
 
 /**
@@ -146,26 +183,40 @@ export function markdownToTelegramHtml(markdown: string): string {
 export async function generateJamiReply(
   incomingText: string,
   senderName: string = "Creator",
-  history: ChatMessage[] = []
+  history: ChatMessage[] = [],
+  sellerContext?: {
+    storeName?: string;
+    pendingOrdersCount?: number;
+    weeklyRevenue?: string;
+    isLinked?: boolean;
+  }
 ): Promise<{
   text: string;
   replyMarkup?: Record<string, unknown>;
 }> {
   const clean = incomingText.trim().toLowerCase();
+  const storeName = sellerContext?.storeName || "Amina Spices";
+  const revenue = sellerContext?.weeklyRevenue || "₹4,850";
+  const ordersCount = sellerContext?.pendingOrdersCount ?? 2;
 
-  // /start command
-  if (clean === "/start") {
+  // /start command (with optional deep-link token like /start LINK_seller_amina_01)
+  if (clean.startsWith("/start")) {
+    const isNewLink = clean.includes("link_");
+    const linkBadge = isNewLink
+      ? `\n\n<b>Account Successfully Linked!</b> Connected with your <b>${storeName}</b> storefront.`
+      : "";
+
     return {
-      text: `<b>Namaskaram ${senderName}!</b>\n\nI am <b>Jami</b> (ജമി), your personal AI co-pilot on <b>Homemade CEO</b>.\n\nI help homemakers and creators in Kerala run and scale their business straight from their phone.\n\n<b>What I can do for you:</b>\n- Track your daily customer orders\n- Check live sales & UPI payouts\n- Craft mouthwatering product descriptions\n- Instant support in Malayalam & English\n\nTap an option below or ask me any business question:`,
+      text: `<b>Namaskaram ${senderName}!</b>${linkBadge}\n\nI am <b>Jami</b> (ജമി), your personal AI co-pilot on <b>Homemade CEO</b>.\n\nI help homemakers and creators in Kerala run and scale their business straight from their phone.\n\n<b>What I can do for ${storeName}:</b>\n- Track your daily customer orders (${ordersCount} pending)\n- Check live sales & UPI payouts (${revenue} this week)\n- Craft product descriptions in Malayalam and English\n- Instant support in Malayalam & English\n\nTap an option below or ask me any business question:`,
       replyMarkup: {
         inline_keyboard: [
           [
-            { text: "📦 Recent Orders", callback_data: "cmd_orders" },
-            { text: "💰 Today's Sales", callback_data: "cmd_sales" },
+            { text: "Recent Orders", callback_data: "cmd_orders" },
+            { text: "Today's Sales", callback_data: "cmd_sales" },
           ],
           [
-            { text: "✨ Magic Description", callback_data: "cmd_describe" },
-            { text: "🌐 Open Seller Hub", url: "https://homemadeceo.com/dashboard/seller" },
+            { text: "Magic Description", callback_data: "cmd_describe" },
+            { text: "Open Seller Hub", url: "https://homemadeceo.com/dashboard/seller" },
           ],
         ],
       },
@@ -175,11 +226,11 @@ export async function generateJamiReply(
   // Pure /orders command
   if (clean === "/orders") {
     return {
-      text: `<b>📦 Live Order Status:</b>\n\n- <b>Order #HM-8921</b>\n  Product: Traditional Cut Mango Pickle (500g)\n  Quantity: 2 units\n  Status: <b>Packing</b>\n  Customer: Priya Menon (Kochi)\n\n- <b>Order #HM-8919</b>\n  Product: Homemade Banana Chips\n  Quantity: 3 packs\n  Status: <b>Ready to Ship</b>\n  Customer: Rajesh Nair (Kozhikode)\n\n<i>To print packing labels or request courier pickup, visit your Seller Hub.</i>`,
+      text: `<b>Live Order Status:</b>\n\n- <b>Order #HM-8921</b>\n  Product: Traditional Cut Mango Pickle (500g)\n  Quantity: 2 units\n  Status: <b>Packing</b>\n  Customer: Priya Menon (Kochi)\n\n- <b>Order #HM-8919</b>\n  Product: Homemade Banana Chips\n  Quantity: 3 packs\n  Status: <b>Ready to Ship</b>\n  Customer: Rajesh Nair (Kozhikode)\n\n<i>To print packing labels or request courier pickup, visit your Seller Hub.</i>`,
       replyMarkup: {
         inline_keyboard: [
           [
-            { text: "🚀 Go to Orders Pipeline", url: "https://homemadeceo.com/dashboard/seller/orders" },
+            { text: "Go to Orders Pipeline", url: "https://homemadeceo.com/dashboard/seller/orders" },
           ],
         ],
       },
@@ -189,11 +240,11 @@ export async function generateJamiReply(
   // Pure /sales command
   if (clean === "/sales") {
     return {
-      text: `<b>💰 Financial Snapshot (This Week):</b>\n\n- Total Revenue: <b>₹4,850</b>\n- Completed Orders: <b>14</b>\n- Available Balance: <b>₹3,620</b>\n- Next Automatic Payout: <b>Friday, 5:00 PM via UPI</b>\n\n<i>Tip: Top performing item this week is Traditional Cut Mango Pickle.</i>`,
+      text: `<b>Financial Snapshot (This Week):</b>\n\n- Total Revenue: <b>₹4,850</b>\n- Completed Orders: <b>14</b>\n- Available Balance: <b>₹3,620</b>\n- Next Automatic Payout: <b>Friday, 5:00 PM via UPI</b>\n\n<i>Tip: Top performing item this week is Traditional Cut Mango Pickle.</i>`,
       replyMarkup: {
         inline_keyboard: [
           [
-            { text: "💳 View Earnings & Payouts", url: "https://homemadeceo.com/dashboard/seller/earnings" },
+            { text: "View Earnings & Payouts", url: "https://homemadeceo.com/dashboard/seller/earnings" },
           ],
         ],
       },
@@ -225,11 +276,11 @@ export async function generateJamiReply(
       replyMarkup: {
         inline_keyboard: [
           [
-            { text: "📦 Check Orders", callback_data: "cmd_orders" },
-            { text: "💰 Check Sales", callback_data: "cmd_sales" },
+            { text: "Check Orders", callback_data: "cmd_orders" },
+            { text: "Check Sales", callback_data: "cmd_sales" },
           ],
           [
-            { text: "🌐 Open Seller Hub", url: "https://homemadeceo.com/dashboard/seller" },
+            { text: "Open Seller Hub", url: "https://homemadeceo.com/dashboard/seller" },
           ],
         ],
       },
@@ -239,15 +290,15 @@ export async function generateJamiReply(
 
     // Fallback if Groq has a network issue
     return {
-      text: `<b>Namaskaram ${senderName}!</b>\n\nI received your query: <i>"${incomingText}"</i>.\n\nI am currently updating my neural connection with Homemade CEO. Here are quick shortcuts you can check right away:`,
+      text: `<b>Namaskaram ${senderName}!</b>\n\nI received your query: <i>"${incomingText}"</i>.\n\nI am currently updating my connection with Homemade CEO. Here are quick shortcuts you can check right away:`,
       replyMarkup: {
         inline_keyboard: [
           [
-            { text: "📦 Check Orders", callback_data: "cmd_orders" },
-            { text: "💰 Check Sales", callback_data: "cmd_sales" },
+            { text: "Check Orders", callback_data: "cmd_orders" },
+            { text: "Check Sales", callback_data: "cmd_sales" },
           ],
           [
-            { text: "✨ Magic Description", callback_data: "cmd_describe" },
+            { text: "Magic Description", callback_data: "cmd_describe" },
           ],
         ],
       },
